@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    bool boResult = false;
     RS485Bus = new QSerialPort(this);
     RS485Bus->setPortName("/dev/ttyS0");
     RS485Bus->setBaudRate(QSerialPort::Baud115200);
@@ -13,8 +14,15 @@ MainWindow::MainWindow(QWidget *parent) :
     RS485Bus->setParity(QSerialPort::NoParity);
     RS485Bus->setStopBits(QSerialPort::OneStop);
     RS485Bus->setFlowControl(QSerialPort::NoFlowControl);
-    RS485Bus->open(QIODevice::ReadWrite);
+    boResult = RS485Bus->open(QIODevice::ReadWrite);
+    if (!boResult)
+    {
+      ui->plainTextEdit_DataReceive->clear();
+      ui->plainTextEdit_DataReceive->appendPlainText(RS485Bus->errorString());
+    }
     qDebug()<<RS485Bus->errorString();
+
+    connect(RS485Bus, &QSerialPort::readyRead, this, &MainWindow::RS485DataReceived);
 
 }
 
@@ -30,4 +38,10 @@ void MainWindow::on_Btn_TestWrite_clicked()
     char buff[BUFF_SIZE];
     snprintf (buff, sizeof(buff), "Btn pressed" );
     RS485Bus->write(buff, strlen(buff));
+}
+
+void MainWindow::RS485DataReceived()
+{
+   QByteArray data = RS485Bus->readAll();
+   ui->plainTextEdit_DataReceive->appendPlainText(data);
 }

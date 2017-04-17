@@ -24,6 +24,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QSerialPort *RS485Bus;
+    void RS485DataReceived();
 };
 
 #endif // MAINWINDOW_H
