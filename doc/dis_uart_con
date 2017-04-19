@@ -1,0 +1,8 @@
+#!/bin/bash
+sudo systemctl stop serial-getty@ttyS0.service
+sudo systemctl disable serial-getty@ttyS0.service
+sudo systemctl status serial-getty@ttyS0.service
+
+sudo systemctl stop serial-getty@ttyAMA0.service
+sudo systemctl disable serial-getty@ttyAMA0.service
+sudo systemctl status serial-getty@ttyAMA0.service
