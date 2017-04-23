@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QtSerialPort/QSerialPort>
 #include <stdio.h>
+#include "osprotocol.h"
 
 namespace Ui {
 class MainWindow;

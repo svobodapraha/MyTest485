@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     bool boResult = false;
+    int  iResult  = -1;
     RS485Bus = new QSerialPort(this);
     RS485Bus->setPortName("/dev/ttyS0");
     RS485Bus->setBaudRate(QSerialPort::Baud115200);
@@ -24,12 +25,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(RS485Bus, &QSerialPort::readyRead, this, &MainWindow::RS485DataReceived);
 
+    //init protocol
+    iResult = fnInit();
+
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    int  iResult  = -1;
     RS485Bus->close();
+    iResult = fnDeInt();
+    delete ui;
 }
 
 void MainWindow::on_Btn_TestWrite_clicked()
