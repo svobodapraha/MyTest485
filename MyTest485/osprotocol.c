@@ -39,3 +39,9 @@ int fnDeInt(void)
 
     return 0;
 }
+
+int fnMessageAssembled(char *ReceivedMessage)
+{
+   fprintf( stderr, "Message: %s", ReceivedMessage+1);
+   return 0;
+}

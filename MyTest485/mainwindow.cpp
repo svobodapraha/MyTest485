@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //init protocol
     iResult = fnInit();
 
+    //cookies
+    iResult = iResult;
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +38,9 @@ MainWindow::~MainWindow()
     RS485Bus->close();
     iResult = fnDeInt();
     delete ui;
+
+    //cookies
+    iResult = iResult;
 }
 
 void MainWindow::on_Btn_TestWrite_clicked()
@@ -48,6 +53,31 @@ void MainWindow::on_Btn_TestWrite_clicked()
 
 void MainWindow::RS485DataReceived()
 {
+   #define OS_CHAR_ESC  ((char) 0x1B)
+   #define OS_CHAR_NULL ((char) 0x00)
+   static QByteArray message;
    QByteArray data = RS485Bus->readAll();
-   ui->plainTextEdit_DataReceive->appendPlainText(data);
+   for (int i = 0; i < data.size(); ++i)
+   {
+       if (data[i] == OS_CHAR_ESC)
+       {
+         message.clear();
+         message+=data[i];
+       }
+       else if (data[i] == OS_CHAR_NULL)
+       {
+          message+=data[i];
+          //qDebug() << message.toHex();
+          fnMessageAssembled(message.data());
+       }
+       else
+       {
+         message+=data[i];
+       }
+
+       //qDebug() << data[i];
+   }
+
+   //ui->plainTextEdit_DataReceive->appendPlainText(data);
+   //ui->plainTextEdit_DataReceive->appendPlainText(data.toHex());
 }

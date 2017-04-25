@@ -16,6 +16,7 @@
 
  int fnInit(void);
  int fnDeInt(void);
+ int fnMessageAssembled(char *ReceivedMessage);
 
 
 #ifdef __cplusplus
