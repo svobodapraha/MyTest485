@@ -6,7 +6,7 @@
 
 FILE  *ProtocolLogFile = NULL;
 const char  *ProtocolLogFileName = "OSprotocolLog.log";
-
+TOs2DhLSet Os2DhLSet;
 
 int fnInit(void)
 {
@@ -40,8 +40,35 @@ int fnDeInt(void)
     return 0;
 }
 
-int fnMessageAssembled(char *ReceivedMessage)
+int fnMessageAssembled(char *ReceivedMessage, int iMessageSize)
 {
    fprintf( stderr, "Message: %s", ReceivedMessage+1);
+   //message type
+   if(iMessageSize > 2)
+   {
+       switch (ReceivedMessage[1])
+       {
+          case OS_CHAR_OS2DH_LNSET:
+           if (iMessageSize == (sizeof(TOs2DhLSet) + (MESSAGE_OVERHEAD_SIZE - 1)))
+           {
+              memset(&Os2DhLSet, 0,               sizeof(TOs2DhLSet));
+              memcpy(&Os2DhLSet, ReceivedMessage+2, sizeof(TOs2DhLSet)-1);
+              fprintf( stderr, ";  I: %s", (char *)&Os2DhLSet);
+           }
+          break;
+//          case value:
+
+//          break;
+//          case value:
+
+//          break;
+          default:
+           break;
+       }
+
+   }
+
+
+
    return 0;
 }

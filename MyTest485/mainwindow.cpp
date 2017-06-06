@@ -68,7 +68,7 @@ void MainWindow::RS485DataReceived()
        {
           message+=data[i];
           //qDebug() << message.toHex();
-          fnMessageAssembled(message.data());
+          fnMessageAssembled(message.data(), message.size());
        }
        else
        {
